@@ -47,12 +47,14 @@ def _zip_url() -> str:
 
 
 def _prsten(el) -> list[tuple[float, float]]:
+    """posList → [(x, y)]. EPSG:3035 u URI obliku ima redoslijed osi (northing, easting),
+    pa parove okrećemo (provjereno: prvi broj ≈ 2,5 mil. = northing za RH)."""
     vrijednosti = [float(v) for v in el.find(f".//{GML}posList").text.split()]
-    return list(zip(vrijednosti[0::2], vrijednosti[1::2]))
+    return list(zip(vrijednosti[1::2], vrijednosti[0::2]))
 
 
 def _geometrija(el):
-    """GML MultiSurface → shapely. Koordinate su u EPSG:3035 (os: x, y)."""
+    """GML MultiSurface → shapely (EPSG:3035, nakon zamjene osi: x=easting, y=northing)."""
     poligoni = []
     for pol in el.iter(f"{GML}Polygon"):
         ext = pol.find(f"{GML}exterior")

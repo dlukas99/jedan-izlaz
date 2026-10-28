@@ -39,8 +39,16 @@ def filter_glavni() -> str:
     return f'["highway"~"^({hw})$"]["access"!~"^({acc})$"]["motor_vehicle"!~"^({acc})$"]'
 
 
-def filter_track() -> str:
-    return f'["highway"~"^({"|".join(HIGHWAY_TRACK)})$"]'
+def filter_kombinirani() -> str:
+    """Ceste + putovi `track` u JEDNOM grafu (D7).
+
+    Zašto ne zaseban graf putova: OSMnx pri pojednostavljenju briše čvorove
+    stupnja 2, pa bi se izgubila mjesta gdje se put spaja s cestom. U zajedničkom
+    grafu ta raskrižja ostaju.
+    """
+    hw = "|".join(HIGHWAY_GLAVNI + HIGHWAY_TRACK)
+    acc = "|".join(ACCESS_ISKLJUCI)
+    return f'["highway"~"^({hw})$"]["access"!~"^({acc})$"]["motor_vehicle"!~"^({acc})$"]'
 
 
 def _u_graph(G: nx.MultiDiGraph) -> nx.Graph:
@@ -78,23 +86,26 @@ def _u_graph(G: nx.MultiDiGraph) -> nx.Graph:
     return H
 
 
-def dohvati_grafove(poligon_wgs84, kljuc: str, osvjezi: bool = False) -> tuple[nx.Graph, nx.Graph]:
-    """Glavni graf i graf putova za poligon (EPSG:4326). Vraća neusmjerene Graph objekte."""
+def dohvati_graf(poligon_wgs84, kljuc: str, vrsta: str = "glavni", osvjezi: bool = False) -> nx.Graph:
+    """Neusmjereni graf za poligon (EPSG:4326).
+
+    vrsta: "glavni" (vozive ceste, D2–D6) ili "kombinirani" (ceste + track, D7).
+    retain_all=True je obavezan: bez njega OSMnx odbacuje nepovezane otočne
+    mreže (Zlarin, Žirje) i E0 se ne bi mogao otkriti.
+    """
     _postavi_osmnx()
-    put = INTERIM_DIR / f"graf_{kljuc}.pkl"
+    put = INTERIM_DIR / f"graf_{kljuc}_{vrsta}.pkl"
     if put.exists() and not osvjezi:
         with open(put, "rb") as f:
             return pickle.load(f)
-    G = ox.graph_from_polygon(poligon_wgs84, custom_filter=filter_glavni(), simplify=True,
-                              retain_all=True, truncate_by_edge=True)
-    T = ox.graph_from_polygon(poligon_wgs84, custom_filter=filter_track(), simplify=True,
-                              retain_all=True, truncate_by_edge=True)
-    rez = (_u_graph(G), _u_graph(T))
+    filt = filter_glavni() if vrsta == "glavni" else filter_kombinirani()
+    G = _u_graph(ox.graph_from_polygon(poligon_wgs84, custom_filter=filt, simplify=True,
+                                       retain_all=True, truncate_by_edge=True))
     put.parent.mkdir(parents=True, exist_ok=True)
     with open(put, "wb") as f:
-        pickle.dump(rez, f, protocol=pickle.HIGHEST_PROTOCOL)
+        pickle.dump(G, f, protocol=pickle.HIGHEST_PROTOCOL)
     izvori.zabiljezi("osm", url="https://overpass-api.de/api/interpreter (OSMnx graph_from_polygon)")
-    return rez
+    return G
 
 
 def dohvati_objekte(poligon_wgs84, oznake: dict, ime: str, osvjezi: bool = False) -> gpd.GeoDataFrame:
