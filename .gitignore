@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+data/raw/
+data/interim/
+cache/
+node_modules/
+web/dist/
+.vscode/
+.env
+.pytest_cache/
