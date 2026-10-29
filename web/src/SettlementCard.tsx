@@ -116,7 +116,9 @@ export default function SettlementCard({ n, ug, scenarij, fwiDanas, fwiPovijesni
           izvor={['worldcover', 'effis_ba']}>
           <span className="objasnjenje">Relativno unutar županije. Gorivo (šuma, grmlje, trava) u krugu 2 km:
             {' '}{n.h_gorivo != null ? `${fmtDec(n.h_gorivo * 100)} %` : '–'}; izgorjelo u krugu 5 km od 2000.:
-            {' '}{n.h_pozari_udio != null ? `${fmtDec(n.h_pozari_udio * 100)} %` : '–'}.</span>
+            {' '}{n.h_pozari_udio != null ? `${fmtDec(n.h_pozari_udio * 100)} %` : '–'}
+            {n.h_podloznost != null && <>; modelirana podložnost terena u krugu 5 km: {fmtDec(n.h_podloznost * 100)} %
+              (vjerojatnost da ćelija od 250 m izgori, model D11)</>}.</span>
         </Redak>
         <Redak naslov="Indeks vremenske opasnosti (FWI)"
           vrijednost={`danas: ${fwi(fwiDanas)}; ${fmtDatum(POVIJESNI_DAN)}: ${fwi(fwiPovijesni)}`}

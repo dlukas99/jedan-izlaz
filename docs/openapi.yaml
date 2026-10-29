@@ -1,0 +1,193 @@
+openapi: 3.0.3
+info:
+  title: JEDAN IZLAZ – statički podaci
+  version: "1.0"
+  description: |
+    Izvedeni otvoreni podaci o cestovnim izlazima naselja (pilot: Šibensko-kninska županija).
+    Datoteke su statične (GitHub Pages) i generira ih `python -m etl.pipeline`.
+    Alat za planiranje, ne za uzbunjivanje. U opasnosti slijedite upute 112 i civilne zaštite.
+    Budući korak: isti podaci kao OGC API – Features (pygeoapi), npr. /collections/settlements/items.
+  license:
+    name: ODbL 1.0 (izvedeni podaci s OSM geometrijom); kod EUPL-1.2
+    url: https://opendatacommons.org/licenses/odbl/1-0/
+servers:
+  - url: https://dlukas99.github.io/jedan-izlaz
+paths:
+  /data/settlements.geojson:
+    get:
+      summary: Naselja s brojem izlaza, uskim grlom, ljetnom populacijom, vremenom evakuacije, opasnošću i prioritetom
+      responses:
+        "200":
+          description: GeoJSON FeatureCollection (Point, EPSG:4326)
+          content:
+            application/geo+json:
+              schema: { $ref: "#/components/schemas/NaseljaFC" }
+  /data/bottlenecks.geojson:
+    get:
+      summary: Uska grla (minimalni rez cestovnog grafa) s ljudima iza i vremenom evakuacije
+      responses:
+        "200":
+          description: GeoJSON FeatureCollection (MultiLineString)
+          content:
+            application/geo+json:
+              schema: { $ref: "#/components/schemas/UskaGrlaFC" }
+  /data/second_roads.geojson:
+    get:
+      summary: Kandidati za „drugu cestu“ (prohodnost provjeriti na terenu)
+      responses:
+        "200": { description: GeoJSON FeatureCollection (LineString) }
+  /data/burned.geojson:
+    get:
+      summary: EFFIS opožarene površine u području (pojednostavljeno, CC BY 4.0)
+      responses:
+        "200": { description: GeoJSON FeatureCollection (Polygon) }
+  /data/meta.json:
+    get:
+      summary: Metapodaci – način izvoza, sve konstante scenarija, izvori s licencom i datumom dohvata
+      responses:
+        "200":
+          description: JSON
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Meta" }
+  /data/kpi.json:
+    get:
+      summary: Sažetak (broj naselja po klasi i prioritetu, ljudi ljeti u E0/E1, top-10)
+      responses:
+        "200": { description: JSON }
+  /data/fwi_today.json:
+    get:
+      summary: EFFIS Fire Weather Index za točke naselja (osvježava se svaku noć)
+      responses:
+        "200":
+          description: JSON
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Fwi" }
+  /data/fwi_2026-08-13.json:
+    get:
+      summary: EFFIS FWI na dan požara kod Lokve Rogoznice (povijesni dan)
+      responses:
+        "200":
+          description: JSON
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Fwi" }
+components:
+  schemas:
+    Raspon:
+      type: object
+      description: Vrijednost u tri scenarija; „pes“ = teži slučaj (više ljudi / dulje vrijeme)
+      properties:
+        opt: { type: number, nullable: true }
+        sred: { type: number, nullable: true }
+        pes: { type: number, nullable: true }
+    Naselje:
+      type: object
+      properties:
+        id: { type: string, description: "Matični broj naselja (DGU), tekst s vodećim nulama", example: "042501" }
+        naziv: { type: string, example: Murter }
+        jls: { type: string, example: Murter-Kornati }
+        zupanija: { type: string }
+        stanovnici_2021: { type: integer }
+        stanovnici_65plus: { type: integer }
+        postelje_jls: { type: integer, description: Stalne postelje JLS-a 2025. (DZS) }
+        stanovi_odmor_jls: { type: integer }
+        p_ljeto: { $ref: "#/components/schemas/Raspon" }
+        udio_naselja: { type: number }
+        udio_metoda: { type: string, enum: [osm_turisticki_objekti, udio_stanovnika] }
+        izlazi_e: { type: integer, minimum: 0, maximum: 6, description: "6 znači ≥ 6" }
+        klasa_izlaza: { type: string, enum: [E0, E1, E2-5, E6+] }
+        usko_grlo_id: { type: string, nullable: true }
+        ljudi_iza_reza: { $ref: "#/components/schemas/Raspon" }
+        t_evak_h: { $ref: "#/components/schemas/Raspon" }
+        pokretni_most: { type: boolean }
+        samo_putovi: { type: boolean, description: Nema vozive ceste, samo šumski/poljski putovi }
+        trajektna_linija: { type: string, nullable: true }
+        h_stat: { type: number, nullable: true, minimum: 0, maximum: 1 }
+        h_gorivo: { type: number, nullable: true }
+        h_pozari_udio: { type: number, nullable: true }
+        h_podloznost: { type: number, nullable: true }
+        h_razred: { type: string, enum: [nizak, srednji, visok], nullable: true }
+        prioritet: { type: string, enum: [A, B, C, "-"] }
+        iz: { type: number, description: Indeks 0–100 samo za sortiranje unutar razreda }
+        druga_cesta_km: { type: number, nullable: true }
+        druga_cesta_udio_track: { type: number, nullable: true }
+        tocka_izvor: { type: string, enum: [dgu_rgi, osm_place, dgu_poligon] }
+        napomene: { type: array, items: { type: string } }
+        izvori: { type: array, items: { type: string }, description: Ključevi iz meta.json → izvori }
+    NaseljaFC:
+      type: object
+      properties:
+        type: { type: string, enum: [FeatureCollection] }
+        features:
+          type: array
+          items:
+            type: object
+            properties:
+              type: { type: string, enum: [Feature] }
+              geometry: { type: object }
+              properties: { $ref: "#/components/schemas/Naselje" }
+    UskoGrlo:
+      type: object
+      properties:
+        id: { type: string, example: UG-SKZ-004 }
+        cesta_ref: { type: string, nullable: true, example: D121 }
+        naziv: { type: string, nullable: true }
+        pokretni_most: { type: boolean }
+        pokretni_most_iza: { type: boolean }
+        most: { type: boolean }
+        broj_izlaza: { type: integer }
+        kapacitet_voz_h: { $ref: "#/components/schemas/Raspon" }
+        ljudi_iza: { $ref: "#/components/schemas/Raspon" }
+        t_evak_h: { $ref: "#/components/schemas/Raspon" }
+        naselja_iza: { type: array, items: { type: string } }
+        naselja_iza_nazivi: { type: array, items: { type: string } }
+        pldp:
+          type: object
+          nullable: true
+          properties:
+            godina: { type: integer }
+            vrijednost: { type: integer, description: Prosječni ljetni dnevni promet (vozila/dan), HC }
+            brojilo: { type: string }
+            naziv: { type: string }
+        druga_cesta_km: { type: number, nullable: true }
+    UskaGrlaFC:
+      type: object
+      properties:
+        type: { type: string, enum: [FeatureCollection] }
+        features:
+          type: array
+          items:
+            type: object
+            properties:
+              properties: { $ref: "#/components/schemas/UskoGrlo" }
+    Meta:
+      type: object
+      properties:
+        generirano: { type: string, format: date-time }
+        nacin: { type: string, enum: [live, cache, mock] }
+        scenariji: { type: object }
+        izvori:
+          type: array
+          items:
+            type: object
+            properties:
+              kljuc: { type: string }
+              naziv: { type: string }
+              izdavac: { type: string }
+              url: { type: string, nullable: true }
+              licenca: { type: string }
+              navod: { type: string }
+              dohvaceno: { type: string, nullable: true }
+              metadata_modified: { type: string, nullable: true }
+        odricanje: { type: string }
+    Fwi:
+      type: object
+      properties:
+        datum: { type: string, format: date }
+        sloj: { type: string, example: mf010.fwi }
+        izvor: { type: string }
+        dohvaceno: { type: string }
+        vrijednosti: { type: object, additionalProperties: { type: number, nullable: true } }
+        razredi: { type: object, additionalProperties: { type: string, nullable: true } }

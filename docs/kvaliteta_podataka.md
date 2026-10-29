@@ -1,6 +1,6 @@
 # Kvaliteta podataka
 
-Generirano naredbom `python -m etl.pipeline` (2026-10-29T05:43:20).
+Generirano naredbom `python -m etl.pipeline` (2026-10-29T06:07:16).
 
 - Spajanje DZS → DGU: 199/199 naselja ([('tocno', 199)]); izvor točke: [('dgu_rgi', 194), ('osm_place', 4), ('dgu_poligon', 1)].
 - D4 v1 (mostovi grafa) i v2 (minimalni rez) slažu se za 199/199 naselja.
@@ -31,4 +31,5 @@ Generirano naredbom `python -m etl.pipeline` (2026-10-29T05:43:20).
 - Kontrola razumnosti D6: UG-SKZ-083 (Razvođe; ljudi sred 335) T_sred = 0.04 h — provjeriti ručno.
 - Kontrola razumnosti D6: UG-SKZ-102 (Piramatovci; ljudi sred 327) T_sred = 0.04 h — provjeriti ručno.
 - Kontrola razumnosti D6: 99 uskih grla ima T_sred < 5 min, ali iza svakog je manje od 300 ljudi ljeti — kratko vrijeme je očekivano (malo vozila), nije pogreška podataka. Popis: UG-SKZ-029, UG-SKZ-031, UG-SKZ-034, UG-SKZ-035, UG-SKZ-042, UG-SKZ-044, UG-SKZ-047, UG-SKZ-050, UG-SKZ-054, UG-SKZ-055, UG-SKZ-056, UG-SKZ-058, UG-SKZ-063, UG-SKZ-064, UG-SKZ-065, UG-SKZ-066, UG-SKZ-067, UG-SKZ-069, UG-SKZ-071, UG-SKZ-072, UG-SKZ-074, UG-SKZ-075, UG-SKZ-076, UG-SKZ-077, UG-SKZ-078, UG-SKZ-079, UG-SKZ-080, UG-SKZ-081, UG-SKZ-082, UG-SKZ-084, UG-SKZ-088, UG-SKZ-089, UG-SKZ-090, UG-SKZ-091, UG-SKZ-092, UG-SKZ-093, UG-SKZ-094, UG-SKZ-095, UG-SKZ-097, UG-SKZ-098, UG-SKZ-099, UG-SKZ-100, UG-SKZ-101, UG-SKZ-103, UG-SKZ-104, UG-SKZ-106, UG-SKZ-108, UG-SKZ-109, UG-SKZ-110, UG-SKZ-111, UG-SKZ-112, UG-SKZ-113, UG-SKZ-114, UG-SKZ-115, UG-SKZ-117, UG-SKZ-118, UG-SKZ-119, UG-SKZ-120, UG-SKZ-121, UG-SKZ-122, UG-SKZ-123, UG-SKZ-125, UG-SKZ-127, UG-SKZ-129, UG-SKZ-130, UG-SKZ-131, UG-SKZ-132, UG-SKZ-133, UG-SKZ-135, UG-SKZ-136, UG-SKZ-137, UG-SKZ-138, UG-SKZ-140, UG-SKZ-141, UG-SKZ-142, UG-SKZ-143, UG-SKZ-144, UG-SKZ-145, UG-SKZ-146, UG-SKZ-147, UG-SKZ-148, UG-SKZ-149, UG-SKZ-150, UG-SKZ-151, UG-SKZ-152, UG-SKZ-153, UG-SKZ-154, UG-SKZ-155, UG-SKZ-156, UG-SKZ-157, UG-SKZ-159, UG-SKZ-160, UG-SKZ-161, UG-SKZ-162, UG-SKZ-163, UG-SKZ-165, UG-SKZ-166, UG-SKZ-167, UG-SKZ-168.
+- D8: komponenta p = model podložnosti D11 (prosjek u krugu 5 km).
 - HC WFS: 1188.3 km javnih cesta u županiji; OSM glavni graf pokriva 1182.5 km (99.5%, tolerancija 30 m).

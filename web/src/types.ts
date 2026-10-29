@@ -26,6 +26,7 @@ export interface Naselje {
   h_stat: number | null
   h_gorivo: number | null
   h_pozari_udio: number | null
+  h_podloznost: number | null
   h_razred: 'nizak' | 'srednji' | 'visok' | null
   prioritet: Prioritet
   iz: number

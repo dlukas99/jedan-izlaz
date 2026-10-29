@@ -55,7 +55,10 @@ export default function SourcesPage({ meta, kpi }: { meta: Meta; kpi: Kpi | null
           ({s.kapacitet_trake_voz_h?.opt}/{s.kapacitet_trake_voz_h?.sred}/{s.kapacitet_trake_voz_h?.pes} vozila/h,
           niže klase ceste × 0,6). Uvijek raspon optimistično–pesimistično.</li>
         <li><strong>Statička opasnost</strong> H = 0,6 × udio goriva (WorldCover: šuma, grmlje, trava) u krugu 2 km
-          + 0,4 × udio površine izgorjele u EFFIS-u u krugu 5 km (normirano). Razredi su tercili unutar županije.</li>
+          + 0,4 × podložnost požaru u krugu 5 km (normirano). Podložnost daje model strojnog učenja (gradient boosting)
+          naučen na EFFIS opožarenim površinama 2000.–danas u 7 obalnih županija (mreža 250 m; prostorna
+          provjera po blokovima od 10 km: ROC-AUC 0,78, bolji od logističke regresije 0,75). Razredi su tercili
+          unutar županije.</li>
         <li><strong>Dnevna opasnost</strong>: EFFIS Fire Weather Index (sloj mf010.fwi), razredi iz EFFIS legende.
           Povijesni dan 13.8.2026. je dan požara kod Lokve Rogoznice.</li>
         <li><strong>Prioritet</strong> A: jedan ili nijedan izlaz, visoka opasnost i (izlaz morem ili evakuacija ≥ 1 h);

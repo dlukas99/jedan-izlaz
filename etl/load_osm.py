@@ -3,8 +3,8 @@
 Zašto OSM: jedini otvoreni izvor koji ima i nerazvrstane ceste i šumske putove.
 Javne ceste HC-a (WFS) koristimo samo za provjeru pokrivenosti (load_hc.py).
 
-Graf se dohvaća preko Overpass API-ja (OSMnx) za poligon županije + 15 km
-i sprema u data/interim/ (pickle), jer dohvat traje nekoliko minuta.
+Graf se gradi iz Geofabrik izvatka za Hrvatsku (pyosmium izdvoji ceste u omotnici,
+OSMnx ih pretvori u graf) za poligon županije + 15 km i sprema u data/interim/ (pickle).
 """
 from __future__ import annotations
 

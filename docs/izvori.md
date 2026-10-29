@@ -1,6 +1,6 @@
 # Izvori podataka
 
-Generirano iz `web/public/data/meta.json` (2026-10-29T05:43:20, način: `cache`). Ne uređivati ručno.
+Generirano iz `web/public/data/meta.json` (2026-10-29T06:07:16, način: `live`). Ne uređivati ručno.
 
 | # | Skup podataka | Izdavač | Poveznica | Licenca | Dohvaćeno | Izmijenjeno (metapodaci) |
 |---|---|---|---|---|---|---|
@@ -13,7 +13,7 @@ Generirano iz `web/public/data/meta.json` (2026-10-29T05:43:20, način: `cache`)
 | 7 | Upravne jedinice – INSPIRE (županije, gradovi i općine, naselja) | Državna geodetska uprava (DGU) | [poveznica](https://data.gov.hr/ckan/dataset/upravne-jedinice-inspire) | Otvorena dozvola (NN 56/2023) | 2026-10-28 | 2026-10-22 |
 | 8 | Registar geografskih imena – WFS (imenovana mjesta tipa „naselje“) | Državna geodetska uprava (DGU) | [poveznica](https://data.gov.hr/ckan/dataset/registar-geografskih-imena) | Otvorena dozvola (NN 56/2023) | 2026-10-28 | 2026-10-22 |
 | 9 | EFFIS – indeks opasnosti od požara (Fire Weather Index, sloj mf010.fwi), WMS | European Forest Fire Information System (EFFIS), Copernicus EMS / JRC | [poveznica](https://maps.effis.emergency.copernicus.eu/effis?service=WMS&version=1.1.1&request=GetMap&layers=mf010.fwi&srs=EPSG%3A4326&bbox=15.21%2C43.4%2C16.53%2C44.27&width=132&height=87&format=image%2Ftiff&time=2026-08-13&styles=) | CC BY 4.0 | 2026-10-29 | – |
-| 10 | EFFIS – opožarene površine (modis.ba.poly), WFS | European Forest Fire Information System (EFFIS), Copernicus EMS / JRC | [poveznica](https://maps.effis.emergency.copernicus.eu/effis?service=WFS&version=1.1.0&request=GetFeature&typename=ms%3Amodis.ba.poly&bbox=15.13%2C43.43%2C16.62%2C44.27&outputformat=geojson&maxfeatures=100000) | CC BY 4.0 | 2026-10-28 | – |
+| 10 | EFFIS – opožarene površine (modis.ba.poly), WFS | European Forest Fire Information System (EFFIS), Copernicus EMS / JRC | [poveznica](https://maps.effis.emergency.copernicus.eu/effis?service=WFS&version=1.1.0&request=GetFeature&typename=ms%3Amodis.ba.poly&bbox=15.13%2C43.43%2C16.62%2C44.27&outputformat=geojson&maxfeatures=100000) | CC BY 4.0 | 2026-10-29 | – |
 | 11 | ESA WorldCover 10 m 2021 v200 | European Space Agency (ESA) | [poveznica](https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N42E015_Map.tif) | CC BY 4.0 | 2026-10-28 | – |
 | 12 | OpenStreetMap – cestovna mreža, mjesta, turistički objekti | OpenStreetMap contributors | [poveznica](https://download.geofabrik.de/europe/croatia-latest.osm.pbf) | ODbL 1.0 | 2026-10-28 | – |
 | 13 | Jadrolinija – državne brodske linije (ručno upisane linije u data/manual/trajekti.csv) | Jadrolinija | [poveznica](https://www.jadrolinija.hr/) | javno objavljeni red plovidbe (činjenični podatak) | – | – |

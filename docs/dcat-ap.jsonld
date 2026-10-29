@@ -1,0 +1,72 @@
+{
+  "@context": {
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dct": "http://purl.org/dc/terms/",
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "vcard": "http://www.w3.org/2006/vcard/ns#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@id": "https://dlukas99.github.io/jedan-izlaz/#dataset",
+  "@type": "dcat:Dataset",
+  "dct:title": [
+    { "@language": "hr", "@value": "Izloženost naselja s ograničenim cestovnim izlazom (Šibensko-kninska županija)" },
+    { "@language": "en", "@value": "Exposure of settlements with limited road egress (Šibenik-Knin County)" }
+  ],
+  "dct:description": [
+    { "@language": "hr", "@value": "Za svako naselje: broj neovisnih cestovnih izlaza do sigurne mreže (minimalni rez grafa, 0–6+), usko grlo, procjena ljudi ljeti iza uskog grla i vremena evakuacije cestom (rasponi tri scenarija), statička opasnost od požara i prioritet za plan evakuacije. Izvedeno iz otvorenih podataka DZS-a, DGU-a, Hrvatskih cesta, EFFIS-a, ESA WorldCovera i OpenStreetMapa. Alat za planiranje, ne za uzbunjivanje." }
+  ],
+  "dcat:keyword": [
+    { "@language": "hr", "@value": "evakuacija" }, { "@language": "hr", "@value": "šumski požar" },
+    { "@language": "hr", "@value": "civilna zaštita" }, { "@language": "hr", "@value": "cestovna mreža" },
+    { "@language": "hr", "@value": "procjena rizika" }
+  ],
+  "dcat:theme": [
+    { "@id": "http://publications.europa.eu/resource/authority/data-theme/ENVI" },
+    { "@id": "http://publications.europa.eu/resource/authority/data-theme/TRAN" },
+    { "@id": "http://publications.europa.eu/resource/authority/data-theme/JUST" }
+  ],
+  "dct:spatial": { "@id": "http://publications.europa.eu/resource/authority/country/HRV" },
+  "dct:language": { "@id": "http://publications.europa.eu/resource/authority/language/HRV" },
+  "dct:accrualPeriodicity": { "@id": "http://publications.europa.eu/resource/authority/frequency/ANNUAL" },
+  "dct:issued": { "@type": "xsd:date", "@value": "2026-11-09" },
+  "dct:publisher": { "@type": "foaf:Agent", "foaf:name": "Tim JEDAN IZLAZ (Datathon Portala otvorenih podataka 2026.)" },
+  "dcat:contactPoint": { "@type": "vcard:Kind", "vcard:fn": "JEDAN IZLAZ", "vcard:hasURL": { "@id": "https://github.com/dlukas99/jedan-izlaz/issues" } },
+  "dcat:landingPage": { "@id": "https://dlukas99.github.io/jedan-izlaz/" },
+  "dct:conformsTo": { "@id": "https://github.com/dlukas99/jedan-izlaz/blob/main/docs/openapi.yaml" },
+  "dct:source": [
+    { "@id": "https://data.gov.hr/ckan/dataset/statistika-u-nizu-popis-stanovnistva-kucanstava-i-stanova-2021" },
+    { "@id": "https://data.gov.hr/ckan/dataset/statistika-u-nizu-popis-stanovnistva-kucanstava-i-stanova-2021-stambene-jedinice" },
+    { "@id": "https://data.gov.hr/ckan/dataset/brojenje-prometa-na-cestama-republike-hrvatske-godine-2025" },
+    { "@id": "https://data.gov.hr/ckan/dataset/upravne-jedinice-inspire" },
+    { "@id": "https://data.gov.hr/ckan/dataset/registar-geografskih-imena" },
+    { "@id": "https://registri.nipp.hr/izvori/1656" },
+    { "@id": "https://forest-fire.emergency.copernicus.eu/" },
+    { "@id": "https://esa-worldcover.org/" },
+    { "@id": "https://www.openstreetmap.org/" }
+  ],
+  "dcat:distribution": [
+    {
+      "@type": "dcat:Distribution",
+      "dct:title": "Naselja (GeoJSON)",
+      "dcat:accessURL": { "@id": "https://dlukas99.github.io/jedan-izlaz/data/settlements.geojson" },
+      "dcat:downloadURL": { "@id": "https://dlukas99.github.io/jedan-izlaz/data/settlements.geojson" },
+      "dcat:mediaType": { "@id": "https://www.iana.org/assignments/media-types/application/geo+json" },
+      "dct:license": { "@id": "https://opendatacommons.org/licenses/odbl/1-0/" }
+    },
+    {
+      "@type": "dcat:Distribution",
+      "dct:title": "Uska grla (GeoJSON)",
+      "dcat:accessURL": { "@id": "https://dlukas99.github.io/jedan-izlaz/data/bottlenecks.geojson" },
+      "dcat:downloadURL": { "@id": "https://dlukas99.github.io/jedan-izlaz/data/bottlenecks.geojson" },
+      "dcat:mediaType": { "@id": "https://www.iana.org/assignments/media-types/application/geo+json" },
+      "dct:license": { "@id": "https://opendatacommons.org/licenses/odbl/1-0/" }
+    },
+    {
+      "@type": "dcat:Distribution",
+      "dct:title": "Metapodaci i izvori (JSON)",
+      "dcat:accessURL": { "@id": "https://dlukas99.github.io/jedan-izlaz/data/meta.json" },
+      "dcat:mediaType": { "@id": "https://www.iana.org/assignments/media-types/application/json" },
+      "dct:license": { "@id": "https://opendatacommons.org/licenses/odbl/1-0/" }
+    }
+  ]
+}

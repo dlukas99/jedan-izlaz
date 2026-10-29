@@ -19,7 +19,7 @@ import geopandas as gpd
 import pandas as pd
 from shapely.geometry import Point
 
-from etl import (evac_time, export, fwi_today, graph_egress as ge, hazard, izvori, load_dgu, load_dzs,
+from etl import (config, evac_time, export, fwi_today, graph_egress as ge, hazard, izvori, load_dgu, load_dzs,
                  load_effis, load_hc, load_osm, match_settlements, population, priority, second_road)
 from etl.config import (CRS_ANALIZA, DOCS_DIR, MAKS_UDALJENOST_CESTE_M, MANUAL_DIR, POVIJESNI_DAN, PUFER_KM,
                         SCENARIJI, WEB_DATA_DIR, ZUPANIJE)
@@ -161,7 +161,17 @@ def pokreni(kljuc_zupanije: str, nacin: str, osvjezi: bool = False):
     bbox_pozari = tuple(round(float(x), 2) for x in zup.buffer(6000).to_crs(4326).total_bounds)
     pozari = load_effis.opozarene_povrsine(bbox_pozari, osvjezi=(nacin == "live"))
     p = hazard.udio_opozarenog(naselja.geometry, pozari)
-    p_norm = hazard.min_max(p)
+    # D11: ako je model podložnosti prošao evaluaciju (docs/evaluacija.md), on zamjenjuje `p`.
+    from etl import ml_susceptibility
+    podloznost = None
+    if ml_susceptibility.prihvacen():
+        podloznost = ml_susceptibility.podloznost_u_krugu(naselja.geometry, config.RADIJUS_POZARI_M)
+        p_norm = hazard.min_max([x if x is not None else 0.0 for x in podloznost])
+        p_izvor = "model podložnosti D11 (prosjek u krugu 5 km)"
+    else:
+        p_norm = hazard.min_max(p)
+        p_izvor = "EFFIS povijest požara (udio izgorjelog u krugu 5 km)"
+    kvaliteta.append(f"D8: komponenta p = {p_izvor}.")
     h = hazard.h_stat(g, p_norm)
     granice = priority.tercili(h)
 
@@ -189,7 +199,7 @@ def pokreni(kljuc_zupanije: str, nacin: str, osvjezi: bool = False):
     # Naselja bez vozive ceste: postoje li barem putovi (track) unutar 1 km?
     C_sindex = C_cvorovi.sindex
     znacajke, props_svi = [], []
-    for r, gi, pi, hi in zip(naselja.itertuples(), g, p, h):
+    for i_n, (r, gi, pi, hi) in enumerate(zip(naselja.itertuples(), g, p, h)):
         z = po_naselju[r.id]
         jz = jezgre[r.id]
         ug = ug_zapisi.get(z["usko_grlo"]) if z["usko_grlo"] else None
@@ -234,6 +244,7 @@ def pokreni(kljuc_zupanije: str, nacin: str, osvjezi: bool = False):
             "samo_putovi": samo_putovi,
             "trajektna_linija": trajekt if klasa == "E0" else None,
             "h_stat": hi, "h_gorivo": gi, "h_pozari_udio": pi, "h_razred": hr,
+            "h_podloznost": podloznost[i_n] if podloznost else None,
             "prioritet": priority.razred(klasa, hr, t_sred),
             "iz": priority.indeks(klasa, hi, t_sred),
             "druga_cesta_km": dc["duljina_km"] if dc else None,
@@ -305,7 +316,7 @@ def pokreni(kljuc_zupanije: str, nacin: str, osvjezi: bool = False):
         "zupanija": zup_cfg["naziv"],
         "validacija": {"d4_v1_v2_nesklad": nesklad, "hc_pokrivenost": pokr,
                        "spajanje_naselja": f"{len(naselja)}/{len(dzs)}"},
-        "h_tercili": granice,
+        "h_tercili": granice, "h_p_izvor": p_izvor,
         "broj_uskih_grla": len(ug_feat), "broj_drugih_cesta": len(dc_feat),
     })
     (WEB_DATA_DIR / "meta.json").write_text(json.dumps(m, ensure_ascii=False, indent=1), encoding="utf-8")

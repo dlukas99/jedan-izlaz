@@ -9,9 +9,9 @@
  },
  "naselja_po_prioritetu": {
   "-": 5,
-  "A": 4,
-  "B": 18,
-  "C": 172
+  "A": 1,
+  "B": 19,
+  "C": 174
  },
  "ljudi_ljeti_u_naseljima_E0": {
   "opt": 9195,
@@ -25,44 +25,20 @@
  },
  "top10": [
   {
-   "id": "053384",
-   "naziv": "Radljevac",
-   "jls": "Knin",
-   "prioritet": "A",
-   "klasa_izlaza": "E0",
-   "iz": 65.6
-  },
-  {
    "id": "022446",
    "naziv": "Grebaštica",
    "jls": "Šibenik",
    "prioritet": "A",
    "klasa_izlaza": "E1",
-   "iz": 38.9
+   "iz": 41.7
   },
   {
-   "id": "002895",
-   "naziv": "Bilice",
-   "jls": "Bilice",
-   "prioritet": "A",
-   "klasa_izlaza": "E1",
-   "iz": 35.5
-  },
-  {
-   "id": "054135",
-   "naziv": "Raslina",
-   "jls": "Šibenik",
-   "prioritet": "A",
-   "klasa_izlaza": "E1",
-   "iz": 34.7
-  },
-  {
-   "id": "030503",
-   "naziv": "Kornati",
-   "jls": "Murter-Kornati",
+   "id": "010421",
+   "naziv": "Dazlina",
+   "jls": "Tisno",
    "prioritet": "B",
    "klasa_izlaza": "E0",
-   "iz": 59.7
+   "iz": 71.4
   },
   {
    "id": "026310",
@@ -70,7 +46,7 @@
    "jls": "Tisno",
    "prioritet": "B",
    "klasa_izlaza": "E1",
-   "iz": 46.6
+   "iz": 52.6
   },
   {
    "id": "064700",
@@ -78,7 +54,7 @@
    "jls": "Tisno",
    "prioritet": "B",
    "klasa_izlaza": "E1",
-   "iz": 46.3
+   "iz": 51.9
   },
   {
    "id": "042501",
@@ -86,7 +62,7 @@
    "jls": "Murter-Kornati",
    "prioritet": "B",
    "klasa_izlaza": "E1",
-   "iz": 40.3
+   "iz": 44.7
   },
   {
    "id": "002631",
@@ -94,15 +70,39 @@
    "jls": "Tisno",
    "prioritet": "B",
    "klasa_izlaza": "E1",
-   "iz": 38.2
+   "iz": 41.9
   },
   {
-   "id": "073911",
-   "naziv": "Žagrović",
-   "jls": "Knin",
+   "id": "054135",
+   "naziv": "Raslina",
+   "jls": "Šibenik",
    "prioritet": "B",
    "klasa_izlaza": "E1",
-   "iz": 6.6
+   "iz": 29.4
+  },
+  {
+   "id": "015482",
+   "naziv": "Dubrava kod Tisna",
+   "jls": "Tisno",
+   "prioritet": "B",
+   "klasa_izlaza": "E1",
+   "iz": 7.0
+  },
+  {
+   "id": "022152",
+   "naziv": "Gradina",
+   "jls": "Šibenik",
+   "prioritet": "B",
+   "klasa_izlaza": "E1",
+   "iz": 3.8
+  },
+  {
+   "id": "015032",
+   "naziv": "Drinovci",
+   "jls": "Drniš",
+   "prioritet": "B",
+   "klasa_izlaza": "E1",
+   "iz": 2.6
   }
  ]
 }

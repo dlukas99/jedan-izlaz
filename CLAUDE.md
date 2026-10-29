@@ -99,6 +99,20 @@ Kod izjednačenja odlučuje Izvedivost, pa Upotreba otvorenih podataka. Nagrada 
 - **P** = PROVJERENO (stranica ili metapodaci otvoreni 28.10.2026.).
 - **N** = NEPROVJERENO. Prvo ga provjeri `etl/probe.py`, koji spremi sirovi odgovor u `data/raw/<izvor>_probe/`. Tek onda se piše parser. Nakon provjere promijeni N u P i dodaj datum.
 
+**Rezultat provjere 28.–29.10.2026. (`docs/probe_report.md`; ima prednost pred N oznakama niže):**
+- **DZS po naseljima — P:** list `1.`, zaglavlje u retku „Županija“; stupci Županija | Grad/Općina | naziv JLS | Naselje | Spol (`sv.`/`m`/`ž`) | Ukupno | dobne skupine po 5 godina (65+ = zbroj od „65 – 69“). **Nema matičnog broja naselja.** ŠKŽ: 199 naselja, 20 JLS, 96.381 st.; slug CKAN paketa potvrđen.
+- **DZS stambene jedinice — P:** list `1.`, stupac „za odmor“ (stanovi koji se koriste povremeno); retci s „m2“ su površine. ŠKŽ 16.939, Tisno 1.997.
+- **DZS Turizam 2025 — P (samo PDF):** https://podaci.dzs.hr/2026/en/122435 vraća PDF; tablica 2.11 na str. 59–68; čita se pdfplumberom (stupci po x-koordinati). ŠKŽ 80.914 stalnih postelja.
+- **HC brojenje 2025 — P:** ZIP sadrži `csv 2025.zip` → `Promet na cestama Republike Hrvatske 2025.csv` (cp1250, `;`): cesta; brojilo; ime; PGDP; PLDP; … Brojila **nemaju koordinate**. Murter: `121;5304;Murter;2940;5835`.
+- **HC WFS — P:** radi bez registracije; `hc_inspire_tn-ro:RoadLink`, GML 3.2, EPSG:3765, **najviše 50 objekata po stranici**; RoadLink nema oznaku ni kategoriju ceste (samo geometrija) → koristi se za provjeru pokrivenosti OSM-a (99,5 %).
+- **HAC WFS — P:** GetCapabilities radi (`tn-ro:Road`, `RoadLink`, …); nije korišten (A1 je u OSM-u).
+- **EFFIS — P:** sloj `ecmwf007.fwi` **više ne postoji**, FWI je **`mf010.fwi`** (TIME 2018-01-01/2099-12-31, zadano ~3 dana unaprijed). GetMap `image/tiff` vraća **float32 FWI vrijednosti**; GetFeatureInfo nije podržan. Legenda: <11,2 / 11,2–21,3 / 21,3–38 / 38–50 / 50–70 / >70. WMS podržava EPSG:3857 i CORS. BA WFS `ms:modis.ba.poly`: bbox **bez** oznake CRS-a (lon,lat); atributi FIREDATE, AREA_HA, PROVINCE, COMMUNE…; sloj `fuel_map` postoji.
+- **DGU Upravne jedinice — P:** ATOM → ZIP 209 MB → GML 601 MB (EPSG:3035, **os N,E**), 50.194 jedinica, razine država/županija/JLS/**naselje (s matičnim brojem `nationalCode`)**/stat. i popisni krugovi. ŠKŽ šifra **15**.
+- **DGU Registar geografskih imena — P (novi izvor):** WFS `wfshr:nippimenovanomjesto`, JSON, EPSG:3765, CQL_FILTER; tip „naselje“ = službena točka naselja.
+- **WorldCover — P:** tile N42E015 postoji; COG s pregledima, čita se `/vsicurl/` po prozorima.
+- **OSM — P:** most u Tisnu `bridge=movable`, `ref=D121`, most grafa. Javni Overpass 28.10. vraćao 502 → koristi se **Geofabrik PBF** (plan B).
+- **GISCO NUTS3 — P:** HR034 = Šibensko-kninska (nije potreban; granice iz DGU).
+
 ### 3.1 data.gov.hr (CKAN API)
 
 API: `https://data.gov.hr/ckan/api/3/action/` s akcijama `package_search?q=…` i `package_show?id=…` (P).
@@ -390,28 +404,30 @@ jedan-izlaz/
 
 **Mock pravilo:** mock podaci imaju `"nacin": "mock"`, a UI tada prikazuje crvenu traku „MOCK“. Mock se nikad ne pojavljuje u videu ni u predaji.
 
+**Dodana polja (v1.1, 29.10., zapis u §9):** naselja — `stanovnici_65plus`, `stanovi_odmor_jls`, `udio_naselja`, `samo_putovi`, `h_gorivo`, `h_pozari_udio`, `h_podloznost`, `druga_cesta_udio_track`, `tocka_izvor`; uska grla — `most`, `pokretni_most_iza`, `broj_izlaza`, `naselja_iza_nazivi`, `druga_cesta_km`, `pldp.naziv`; geometrija uskih grla je MultiLineString (rez može imati više bridova); nove datoteke `second_roads.geojson`, `burned.geojson`; `fwi_*.json` ima i `razredi`, `izvor`, `dohvaceno`.
+
 ---
 
 ## 6. Opseg MVP-a i ekrani
 
 **Mora (do 4.11.):**
-- [ ] `probe.py` i `docs/probe_report.md` (svi izvori iz odjeljka 3)
-- [ ] mock podaci po shemi 5.2 (da web može raditi od prvog dana)
-- [ ] OSM graf ŠKŽ + D4 v1 (mostovi grafa); test: Murter je E1, Zlarin i Prvić su E0
-- [ ] D4 v2: broj izlaza preko minimalnog reza
-- [ ] spajanje naselja ≥ 95 % (ostatak u ručnom CSV-u)
-- [ ] D5 ljetna populacija (3 scenarija) i D6 vrijeme evakuacije (raspon)
-- [ ] D8 statička opasnost i D9 prioritet
-- [ ] export + karta + kartica naselja + prioritetna lista + stranica izvora + odricanje
-- [ ] GitHub Pages deploy, `tests.yml` zelen
-- [ ] `docs/izvori.md` generiran iz `meta.json`
+- [x] `probe.py` i `docs/probe_report.md` (svi izvori iz odjeljka 3)
+- [x] mock podaci po shemi 5.2 (`python -m etl.pipeline --mode mock`)
+- [x] OSM graf ŠKŽ + D4 v1 (mostovi grafa); test: Murter je E1, Zlarin i Prvić su E0
+- [x] D4 v2: broj izlaza preko minimalnog reza (v1 i v2 se slažu 199/199)
+- [x] spajanje naselja ≥ 95 % (199/199 = 100 %)
+- [x] D5 ljetna populacija (3 scenarija) i D6 vrijeme evakuacije (raspon)
+- [x] D8 statička opasnost i D9 prioritet
+- [x] export + karta + kartica naselja + prioritetna lista + stranica izvora + odricanje
+- [ ] GitHub Pages deploy (workflow gotov; treba jednom uključiti Settings → Pages → Source: GitHub Actions), `tests.yml` napisan
+- [x] `docs/izvori.md` generiran iz `meta.json`
 
 **Trebalo bi (5.–6.11.):**
-- [ ] noćni EFFIS FWI + povijesni dan 13.8.2026.
-- [ ] D7 druga cesta
-- [ ] PLDP na karticama uskih grla
-- [ ] D11 model podložnosti (samo ako prođe evaluaciju)
-- [ ] Splitsko-dalmatinska (ako je GO): Čiovo kao kontrola E2-5 (drugi most iz 2018.), Lokva Rogoznica
+- [x] noćni EFFIS FWI + povijesni dan 13.8.2026. (`nightly_fwi.yml`; prvi automatski prolaz tek nakon pusha)
+- [x] D7 druga cesta
+- [x] PLDP na karticama uskih grla
+- [x] D11 model podložnosti — prošao (ROC-AUC 0,776 > 0,747 baseline), u D8 zamjenjuje `p`
+- [ ] Splitsko-dalmatinska (ako je GO): Čiovo kao kontrola E2-5 (drugi most iz 2018.), Lokva Rogoznica — namjerno nije rađeno (odluka korisnika 28.10.: samo ŠKŽ)
 
 **Moglo bi:**
 - [ ] Zadarska (Vir)
@@ -529,6 +545,17 @@ cd web; npm install; npm run dev
 - 28.10. Podaci s data.gov.hr dohvaćaju se preko CKAN API-ja; PLDP Hrvatskih cesta služi za validaciju.
 - 28.10. Raspored Tisna („2 × 30 min“) ispravljen je prema TZ Tisno (D10).
 - 28.10. Kod je pod EUPL-1.2, a izvedeni podaci pod ODbL.
+- 28.10. Opseg: samo ŠKŽ, „Mora“ + „Trebalo bi“; SDŽ i Zadarska se ne rade (odluka korisnika). Velika preuzimanja (> 100 MB: DGU AU, Geofabrik PBF) odobrena.
+- 28.10. Točka naselja iz **DGU Registra geografskih imena** (novi izvor), jer poligoni naselja DGU-a pokrivaju cijeli teritorij. Ključ naselja je DGU matični broj; DZS se spaja po (JLS, naziv): 199/199.
+- 28.10. OSM se čita iz **Geofabrik PBF-a** (pyosmium → OSMnx `graph_from_xml`), jer je javni Overpass vraćao 502. Za D7 koristi se jedan zajednički graf cesta + `track` (zaseban graf putova gubi spojeve pri pojednostavljenju).
+- 28.10. EFFIS FWI sloj je `mf010.fwi` (ne `ecmwf007.fwi`); vrijednosti iz GetMap `image/tiff`. Na karti se FWI i gorivo prikazuju i uživo kao WMS.
+- 28.10. Max-flow: vlastiti Edmonds–Karp s više izvora i ponora (test prema networkx). Usko grlo = minimalni rez **najbliži sigurnoj mreži** (najviše ljudi iza). Zato je kod Murtera usko grlo kopnena dionica D121 iza Tisna, a pokretni most je unutarnje usko grlo (`pokretni_most_iza`, napomena D10).
+- 28.10. D8 `g` se računa na kopnenim pikselima (more se ne broji).
+- 29.10. **Sigurna mreža = izvan poligona županije + 1 km** (`SIGURNO_PUFER_M`): DGU poligon je kopneni, pa su rive na otocima bile „izvan županije“ (Murter E2-5, Žirje E1). Nakon ispravka Murter E1; Zlarin, Prvić, Krapanj, Kaprije i Žirje E0.
+- 29.10. Naselja bez vozive ceste unutar 1 km, ali s putovima `track`, dobivaju `samo_putovi=true` (Radljevac, Dazlina, Kornati) — E0, ali ne „samo morem“.
+- 29.10. Kontrola razumnosti D6: T < 5 min uz < 300 ljudi navodi se zbirno (očekivano), pojedinačno samo ostali slučajevi.
+- 29.10. D11 model (HistGradientBoosting, 7 obalnih županija, 250 m, blok-CV 10 km) ROC-AUC 0,776 > LR 0,747 → **prihvaćen**, zamjenjuje `p` u D8 (prosjek u 5 km). Bez DEM-a (licenca N).
+- 29.10. Shema v1.1: dodana polja (§5.2) i datoteke `second_roads.geojson`, `burned.geojson`.
 
 ---
 
@@ -540,18 +567,20 @@ cd web; npm install; npm run dev
 - [ ] Je li video prihvatljiv kao unlisted YouTube poveznica?
 
 **Podaci (provjerava probe):**
-- [ ] DZS po naseljima: listovi, stupci, šifre naselja, dobne skupine
-- [ ] DZS stambene jedinice: stupac sa stanovima za odmor
-- [ ] DZS tablica 2.11: XLSX ili PDF
-- [ ] HC brojenje (ZIP): PLDP, brojila, lokacije
-- [ ] HC WFS: radi li bez registracije, atributi, lokalne ceste, CRS
-- [ ] HAC WFS
-- [ ] EFFIS: format GetFeatureInfo, GeoTIFF s vrijednostima ili RGB, horizont prognoze, BA s BBOX-om, atributi, legenda FWI-ja
-- [ ] DGU ATOM: razina naselja, matični broj naselja
-- [ ] URL WorldCover tilea
-- [ ] OSM: Tisno `bridge=movable`, Krapanj, oznake `access` na putevima
-- [ ] Broj naselja u ŠKŽ (~200?)
-- [ ] Jadrolinija: linije 505 i 532
+- [x] DZS po naseljima: listovi, stupci, dobne skupine (nema šifre naselja) — P 28.10.
+- [x] DZS stambene jedinice: stupac „za odmor“ — P 28.10.
+- [x] DZS tablica 2.11: samo PDF — P 28.10.
+- [x] HC brojenje (ZIP): PLDP i brojila da, lokacije ne — P 28.10.
+- [x] HC WFS: bez registracije, EPSG:3765, 50/stranica, bez atributa ceste — P 29.10.
+- [x] HAC WFS — P 28.10.
+- [x] EFFIS: sloj `mf010.fwi`, GeoTIFF s vrijednostima, legenda, BA s BBOX-om — P 28.10.
+- [x] DGU ATOM: razina naselja i matični broj postoje — P 28.10.
+- [x] URL WorldCover tilea — P 28.10.
+- [x] OSM: Tisno `bridge=movable` (D121) — P 28.10.; Krapanj nema cestovnu vezu (E0)
+- [x] Broj naselja u ŠKŽ: 199 — P 28.10.
+- [ ] Jadrolinija: linije 505 i 532 (`data/manual/trajekti.csv` označen N) — provjeriti prije videa
+- [ ] Nazivi uskih grla: OSM `ref` ponekad nije oznaka javne ceste (npr. „650650“ kod Grebaštice) — provjeriti u OSM-u
+- [ ] Aktivirati GitHub Pages (Settings → Pages → Source: GitHub Actions) i provjeriti prvi prolaz `tests`, `pages`, `nightly_fwi`
 - [ ] Tisno: podizanje u 9:00 ljeti 2026. (Općina Tisno)
 - [ ] Citat Kincade (TR-D 2023) i vrijednost od oko 500 voz/h
 - [ ] Licence: Eurostat grid, ENACT, DEM
@@ -563,7 +592,16 @@ cd web; npm install; npm run dev
 
 ---
 
-## 11. Sljedeći korak (prvi zadatak za Claude Code)
+## 11. Sljedeći korak
+
+Stanje 29.10.: sve „Mora“ i „Trebalo bi“ stavke za ŠKŽ su gotove osim uključivanja Pagesa. Sljedeće:
+1. **Ljudski korak**: GitHub → Settings → Pages → Source: **GitHub Actions**; zatim pokrenuti `pages` i `nightly_fwi` (workflow_dispatch) i provjeriti demo u anonimnom prozoru i na mobitelu.
+2. Testiranje s 2–3 korisnika (CZ, vatrogasci) i UX popravci prema nalazima.
+3. Provjeriti Jadrolinijine linije i raspored mosta Tisno (9:00 ljeti?) i ažurirati `data/manual/`.
+4. 6.11. zamrznuti `kpi.json` za video (`docs/video_scenarij.md`), snimke `node web/scripts/snimke.mjs`.
+5. 8.11. proba predaje iz čistog klona; 9.11. tag `v1.0-predaja` (`docs/predaja.md`).
+
+<details><summary>Prvi zadatak (izvršen 28.–29.10.)</summary>
 
 > Pročitaj CLAUDE.md. Napravi kostur repozitorija prema 5.1:
 > - `.gitignore`;
@@ -592,6 +630,8 @@ cd web; npm install; npm run dev
 >    - ispiši je li cesta preko mosta u Tisnom most grafa i ima li `bridge=movable`.
 >
 > Bez pretpostavki o stupcima. Komentari na hrvatskom. Na kraju predloži izmjene odjeljka 3 (N → P), ažuriraj odjeljke 9–11, commitaj i pushaj.
+
+</details>
 
 ---
 
