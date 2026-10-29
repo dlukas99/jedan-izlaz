@@ -1,0 +1,251 @@
+{
+ "generirano": "2026-10-29T05:43:20",
+ "nacin": "cache",
+ "scenariji": {
+  "popunjenost_stalnih_postelja": {
+   "opt": 0.7,
+   "sred": 0.8,
+   "pes": 0.95
+  },
+  "osoba_po_stanu_za_odmor": {
+   "opt": 2,
+   "sred": 3,
+   "pes": 4
+  },
+  "osoba_po_vozilu": {
+   "opt": 3.0,
+   "sred": 2.5,
+   "pes": 2.0
+  },
+  "kapacitet_trake_voz_h": {
+   "opt": 1300,
+   "sred": 1000,
+   "pes": 600
+  },
+  "faktor_klase_ceste": {
+   "motorway": 1.0,
+   "trunk": 1.0,
+   "primary": 1.0,
+   "secondary": 1.0,
+   "tertiary": 1.0,
+   "unclassified": 0.6,
+   "residential": 0.6,
+   "living_street": 0.6,
+   "service": 0.6,
+   "track": 0.3
+  },
+  "maks_izlaza": 6,
+  "pufer_km": 15,
+  "h_tezine": {
+   "gorivo": 0.6,
+   "pozari": 0.4
+  },
+  "h_radijusi_m": {
+   "gorivo": 2000,
+   "pozari": 5000
+  },
+  "f_klase": {
+   "E0": 1.0,
+   "E1": 0.9,
+   "E2-5": 0.4,
+   "E6+": 0.0
+  },
+  "t_pragovi_h": {
+   "A": 1.0,
+   "B": 3.0,
+   "norma": 3.0
+  },
+  "fwi_razredi": [
+   [
+    0.0,
+    "nizak"
+   ],
+   [
+    11.2,
+    "umjeren"
+   ],
+   [
+    21.3,
+    "visok"
+   ],
+   [
+    38.0,
+    "vrlo visok"
+   ],
+   [
+    50.0,
+    "ekstreman"
+   ],
+   [
+    70.0,
+    "vrlo ekstreman"
+   ]
+  ],
+  "povijesni_dan": "2026-08-13"
+ },
+ "izvori": [
+  {
+   "kljuc": "dzs_popis_naselja",
+   "naziv": "Popis stanovništva 2021. – stanovništvo prema starosti i spolu po naseljima",
+   "izdavac": "Državni zavod za statistiku (DZS)",
+   "url": "https://podaci.dzs.hr/media/rqybclnx/popis_2021-stanovnistvo_po_naseljima.xlsx",
+   "licenca": "Otvorena dozvola",
+   "navod": "Izvor: DZS, Popis stanovništva, kućanstava i stanova 2021.",
+   "dohvaceno": "2026-10-28T20:36:37+0100",
+   "metadata_modified": "2026-07-16T11:55:08.447686",
+   "url_paketa": "https://data.gov.hr/ckan/dataset/statistika-u-nizu-popis-stanovnistva-kucanstava-i-stanova-2021"
+  },
+  {
+   "kljuc": "dzs_stanovi",
+   "naziv": "Popis 2021. – stambene jedinice po gradovima i općinama (stanovi za odmor)",
+   "izdavac": "Državni zavod za statistiku (DZS)",
+   "url": "https://podaci.dzs.hr/media/ryynjuzk/popis-2021-stambene-jedinice-po-gradovima-i-opcinama.xlsx",
+   "licenca": "Otvorena dozvola",
+   "navod": "Izvor: DZS, Popis stanovništva, kućanstava i stanova 2021.",
+   "dohvaceno": "2026-10-28T20:36:43+0100",
+   "metadata_modified": "2026-04-15T19:07:04.688217",
+   "url_paketa": "https://data.gov.hr/ckan/dataset/statistika-u-nizu-popis-stanovnistva-kucanstava-i-stanova-2021-stambene-jedinice"
+  },
+  {
+   "kljuc": "dzs_turizam_2025",
+   "naziv": "Turizam u 2025. (Statistička izvješća 1747/2026), tablica 2.11 – postelje, dolasci i noćenja po gradovima i općinama",
+   "izdavac": "Državni zavod za statistiku (DZS)",
+   "url": "https://podaci.dzs.hr/2026/en/122435",
+   "licenca": "Otvorena dozvola",
+   "navod": "Izvor: DZS, Turizam u 2025.",
+   "dohvaceno": "2026-10-28T20:36:49+0100",
+   "metadata_modified": null
+  },
+  {
+   "kljuc": "dzs_popunjenost_2025_08",
+   "naziv": "Dolasci i noćenja turista u kolovozu 2025. (priopćenje) – bruto popunjenost stalnih postelja",
+   "izdavac": "Državni zavod za statistiku (DZS)",
+   "url": "https://podaci.dzs.hr/2025/hr/97111",
+   "licenca": "Otvorena dozvola",
+   "navod": "Izvor: DZS, priopćenje za kolovoz 2025.",
+   "dohvaceno": null,
+   "metadata_modified": null
+  },
+  {
+   "kljuc": "hc_brojenje_2025",
+   "naziv": "Brojenje prometa na cestama Republike Hrvatske godine 2025. (PGDP/PLDP)",
+   "izdavac": "Hrvatske ceste d.o.o.",
+   "url": "https://data.gov.hr/ckan/dataset/77fe88a7-5566-48b1-9062-b6061aec3c5c/resource/6a36cb35-329c-4408-ac4a-1d61b2e93e94/download/brojenje-promenta-2025.zip",
+   "licenca": "Otvorena dozvola",
+   "navod": "Izvor: Hrvatske ceste, Brojenje prometa na cestama RH 2025.",
+   "dohvaceno": "2026-10-28T20:57:15+0100",
+   "metadata_modified": "2026-09-15T14:13:49.403908",
+   "url_paketa": "https://data.gov.hr/ckan/dataset/brojenje-prometa-na-cestama-republike-hrvatske-godine-2025"
+  },
+  {
+   "kljuc": "hc_wfs",
+   "naziv": "Mreža javnih cesta RH – WFS INSPIRE (RoadLink)",
+   "izdavac": "Hrvatske ceste d.o.o.",
+   "url": "https://geoportal.hrvatske-ceste.hr/inspire/tn-ro/wfs",
+   "licenca": "Nema uvjeta za pristup i korištenje (NIPP)",
+   "navod": "Izvor: Hrvatske ceste, INSPIRE TN-RO WFS",
+   "dohvaceno": "2026-10-28T20:58:04",
+   "metadata_modified": null
+  },
+  {
+   "kljuc": "dgu_au",
+   "naziv": "Upravne jedinice – INSPIRE (županije, gradovi i općine, naselja)",
+   "izdavac": "Državna geodetska uprava (DGU)",
+   "url": "https://geoportal.dgu.hr/services/atom/INSPIRE_Administrative_Units_(AU).zip",
+   "licenca": "Otvorena dozvola (NN 56/2023)",
+   "navod": "Sadrži podatke Državne geodetske uprave (Upravne jedinice, INSPIRE)",
+   "dohvaceno": "2026-10-28T20:33:26+0100",
+   "metadata_modified": "2026-10-22T06:48:05.491626",
+   "url_paketa": "https://data.gov.hr/ckan/dataset/upravne-jedinice-inspire"
+  },
+  {
+   "kljuc": "dgu_rgi",
+   "naziv": "Registar geografskih imena – WFS (imenovana mjesta tipa „naselje“)",
+   "izdavac": "Državna geodetska uprava (DGU)",
+   "url": "https://rgi.dgu.hr/geoserver/wfshr/wfs",
+   "licenca": "Otvorena dozvola (NN 56/2023)",
+   "navod": "Sadrži podatke Državne geodetske uprave (Registar geografskih imena)",
+   "dohvaceno": "2026-10-28T20:41:25",
+   "metadata_modified": "2026-10-22T06:52:44.706110",
+   "url_paketa": "https://data.gov.hr/ckan/dataset/registar-geografskih-imena"
+  },
+  {
+   "kljuc": "effis_fwi",
+   "naziv": "EFFIS – indeks opasnosti od požara (Fire Weather Index, sloj mf010.fwi), WMS",
+   "izdavac": "European Forest Fire Information System (EFFIS), Copernicus EMS / JRC",
+   "url": "https://maps.effis.emergency.copernicus.eu/effis?service=WMS&version=1.1.1&request=GetMap&layers=mf010.fwi&srs=EPSG%3A4326&bbox=15.21%2C43.4%2C16.53%2C44.27&width=132&height=87&format=image%2Ftiff&time=2026-08-13&styles=",
+   "licenca": "CC BY 4.0",
+   "navod": "EFFIS – European Forest Fire Information System, Copernicus EMS / JRC",
+   "dohvaceno": "2026-10-29T05:41:42+0100",
+   "metadata_modified": null
+  },
+  {
+   "kljuc": "effis_ba",
+   "naziv": "EFFIS – opožarene površine (modis.ba.poly), WFS",
+   "izdavac": "European Forest Fire Information System (EFFIS), Copernicus EMS / JRC",
+   "url": "https://maps.effis.emergency.copernicus.eu/effis?service=WFS&version=1.1.0&request=GetFeature&typename=ms%3Amodis.ba.poly&bbox=15.13%2C43.43%2C16.62%2C44.27&outputformat=geojson&maxfeatures=100000",
+   "licenca": "CC BY 4.0",
+   "navod": "EFFIS – European Forest Fire Information System, Copernicus EMS / JRC",
+   "dohvaceno": "2026-10-28T20:57:37+0100",
+   "metadata_modified": null
+  },
+  {
+   "kljuc": "worldcover",
+   "naziv": "ESA WorldCover 10 m 2021 v200",
+   "izdavac": "European Space Agency (ESA)",
+   "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N42E015_Map.tif",
+   "licenca": "CC BY 4.0",
+   "navod": "© ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021)",
+   "dohvaceno": "2026-10-28T20:57:32",
+   "metadata_modified": null
+  },
+  {
+   "kljuc": "osm",
+   "naziv": "OpenStreetMap – cestovna mreža, mjesta, turistički objekti",
+   "izdavac": "OpenStreetMap contributors",
+   "url": "https://download.geofabrik.de/europe/croatia-latest.osm.pbf",
+   "licenca": "ODbL 1.0",
+   "navod": "© OpenStreetMap contributors",
+   "dohvaceno": "2026-10-28T20:50:24+0100",
+   "metadata_modified": null
+  },
+  {
+   "kljuc": "jadrolinija",
+   "naziv": "Jadrolinija – državne brodske linije (ručno upisane linije u data/manual/trajekti.csv)",
+   "izdavac": "Jadrolinija",
+   "url": "https://www.jadrolinija.hr/",
+   "licenca": "javno objavljeni red plovidbe (činjenični podatak)",
+   "navod": "Izvor: Jadrolinija, red plovidbe",
+   "dohvaceno": null,
+   "metadata_modified": null
+  },
+  {
+   "kljuc": "tz_tisno_most",
+   "naziv": "Raspored dizanja pokretnog mosta u Tisnom",
+   "izdavac": "Turistička zajednica općine Tisno",
+   "url": "https://www.tz-tisno.hr/hr/planiranje-putovanja/korisne-informacije/raspored-dizanja-mosta/",
+   "licenca": "javno objavljena informacija",
+   "navod": "Izvor: TZ Tisno",
+   "dohvaceno": null,
+   "metadata_modified": null
+  }
+ ],
+ "odricanje": "Alat za planiranje, ne za uzbunjivanje. U opasnosti slijedite upute 112 i civilne zaštite.",
+ "zupanija": "Šibensko-kninska",
+ "validacija": {
+  "d4_v1_v2_nesklad": [],
+  "hc_pokrivenost": {
+   "hc_km": 1188.3,
+   "pokriveno_km": 1182.5,
+   "udio": 0.9952,
+   "tolerancija_m": 30
+  },
+  "spajanje_naselja": "199/199"
+ },
+ "h_tercili": [
+  0.596,
+  0.655
+ ],
+ "broj_uskih_grla": 168,
+ "broj_drugih_cesta": 31
+}

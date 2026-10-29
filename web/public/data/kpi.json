@@ -1,0 +1,108 @@
+{
+ "datum": "2026-10-29",
+ "broj_naselja": 199,
+ "naselja_po_klasi": {
+  "E0": 9,
+  "E1": 45,
+  "E2-5": 140,
+  "E6+": 5
+ },
+ "naselja_po_prioritetu": {
+  "-": 5,
+  "A": 4,
+  "B": 18,
+  "C": 172
+ },
+ "ljudi_ljeti_u_naseljima_E0": {
+  "opt": 9195,
+  "sred": 11412,
+  "pes": 13977
+ },
+ "ljudi_ljeti_u_naseljima_E1": {
+  "opt": 39685,
+  "sred": 47002,
+  "pes": 55627
+ },
+ "top10": [
+  {
+   "id": "053384",
+   "naziv": "Radljevac",
+   "jls": "Knin",
+   "prioritet": "A",
+   "klasa_izlaza": "E0",
+   "iz": 65.6
+  },
+  {
+   "id": "022446",
+   "naziv": "Grebaštica",
+   "jls": "Šibenik",
+   "prioritet": "A",
+   "klasa_izlaza": "E1",
+   "iz": 38.9
+  },
+  {
+   "id": "002895",
+   "naziv": "Bilice",
+   "jls": "Bilice",
+   "prioritet": "A",
+   "klasa_izlaza": "E1",
+   "iz": 35.5
+  },
+  {
+   "id": "054135",
+   "naziv": "Raslina",
+   "jls": "Šibenik",
+   "prioritet": "A",
+   "klasa_izlaza": "E1",
+   "iz": 34.7
+  },
+  {
+   "id": "030503",
+   "naziv": "Kornati",
+   "jls": "Murter-Kornati",
+   "prioritet": "B",
+   "klasa_izlaza": "E0",
+   "iz": 59.7
+  },
+  {
+   "id": "026310",
+   "naziv": "Jezera",
+   "jls": "Tisno",
+   "prioritet": "B",
+   "klasa_izlaza": "E1",
+   "iz": 46.6
+  },
+  {
+   "id": "064700",
+   "naziv": "Tisno",
+   "jls": "Tisno",
+   "prioritet": "B",
+   "klasa_izlaza": "E1",
+   "iz": 46.3
+  },
+  {
+   "id": "042501",
+   "naziv": "Murter",
+   "jls": "Murter-Kornati",
+   "prioritet": "B",
+   "klasa_izlaza": "E1",
+   "iz": 40.3
+  },
+  {
+   "id": "002631",
+   "naziv": "Betina",
+   "jls": "Tisno",
+   "prioritet": "B",
+   "klasa_izlaza": "E1",
+   "iz": 38.2
+  },
+  {
+   "id": "073911",
+   "naziv": "Žagrović",
+   "jls": "Knin",
+   "prioritet": "B",
+   "klasa_izlaza": "E1",
+   "iz": 6.6
+  }
+ ]
+}

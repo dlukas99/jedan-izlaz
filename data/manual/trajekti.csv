@@ -1,0 +1,8 @@
+# izvor: Jadrolinija red plovidbe (https://www.jadrolinija.hr/) — linije su N (NEPROVJERENO), provjeriti prije videa; Krapanj: lokalna brodska linija
+jls,naselje,linija,izvor_status
+Šibenik,Zlarin,"Jadrolinija 505 Šibenik – Zlarin – Prvić Šepurine – Vodice; 532 Šibenik – Zlarin – Obonjan – Kaprije – Žirje",N
+Šibenik,Kaprije,"Jadrolinija 532 Šibenik – Zlarin – Obonjan – Kaprije – Žirje",N
+Šibenik,Žirje,"Jadrolinija 532 Šibenik – Zlarin – Obonjan – Kaprije – Žirje",N
+Vodice,Prvić Luka,"Jadrolinija 505 Šibenik – Zlarin – Prvić Luka – Prvić Šepurine – Vodice",N
+Vodice,Prvić Šepurine,"Jadrolinija 505 Šibenik – Zlarin – Prvić Šepurine – Vodice",N
+Šibenik,Krapanj,"lokalna brodska linija Brodarica – Krapanj",N

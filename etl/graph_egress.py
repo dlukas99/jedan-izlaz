@@ -30,13 +30,14 @@ import networkx as nx
 import numpy as np
 from shapely.geometry import LineString, MultiLineString
 
-from etl.config import MAKS_IZLAZA, MAKS_UDALJENOST_CESTE_M
+from etl.config import MAKS_IZLAZA, MAKS_UDALJENOST_CESTE_M, SIGURNO_PUFER_M
 
 
 # --------------------------------------------------------------- D3 -------
-def sigurni_cvorovi(G: nx.Graph, cvorovi: gpd.GeoDataFrame, poligon_zupanije) -> set:
-    """Čvorovi izvan županije + čvorovi na autocesti (highway=motorway)."""
-    unutra = cvorovi.geometry.within(poligon_zupanije).values
+def sigurni_cvorovi(G: nx.Graph, cvorovi: gpd.GeoDataFrame, poligon_zupanije,
+                    pufer_m: float = SIGURNO_PUFER_M) -> set:
+    """Čvorovi izvan županije (+ pufer, zbog riva izvan kopnenog poligona) i čvorovi na autocesti."""
+    unutra = cvorovi.geometry.within(poligon_zupanije.buffer(pufer_m)).values
     sigurni = set(cvorovi.cvor.values[~unutra])
     for u, v, d in G.edges(data=True):
         if d.get("highway") == "motorway":

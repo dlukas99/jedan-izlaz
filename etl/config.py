@@ -33,6 +33,9 @@ ZUPANIJE = {
     "SKZ": {"naziv": "Šibensko-kninska", "nuts3": "HR034"},  # izvor: provjereno u probe (vidi docs/probe_report.md)
 }
 PUFER_KM = 15  # izvor: D3 (graf = poligon županije + 15 km, da sigurna mreža postoji izvan granice)
+# Poligon županije (DGU) je KOPNENI: rive i molovi strše u more izvan njega i bez ovog pufera
+# postaju „sigurni čvorovi“ na samom otoku (Murter bi bio E2-5, Žirje E1). Utvrđeno 29.10.2026.
+SIGURNO_PUFER_M = 1000  # PRETPOSTAVKA: sigurna mreža počinje 1 km izvan kopnene granice županije
 
 # --- D2 Graf ceste ---------------------------------------------------------------
 # izvor: D2 — vozive OSM ceste; service bez access=private|no
