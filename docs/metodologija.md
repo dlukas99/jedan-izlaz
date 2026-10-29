@@ -51,7 +51,13 @@ Popis izvora s licencama: [izvori.md](izvori.md). Kvaliteta podataka: [kvaliteta
    Tisnom iza jedine kopnene dionice D121, a ne samo jednu ulicu. „Iza reza“ su naselja čija je jezgra u
    komponenti izvora u grafu bez bridova reza.
 5. v1 i v2 se slažu za **199/199** naselja (provjera u svakom pokretanju).
-6. **Pokretni most (D10)**: OSM `bridge=movable` (most D121 u Tisnu). Naselja s kojih svaki put prelazi
+6. **Izlazni pravci na karti**: tok se rastavi na bridno-disjunktne putove od jezgre do sigurne mreže
+   (`graph_egress.putovi_toka`) — na karti ih je točno onoliko koliko piše „broj izlaza“. Uz svaki pravac
+   izvozimo duljinu, redoslijed oznaka javnih cesta i kraj (autocesta ili izlaz iz županije) u
+   `routes.geojson`. To je **ilustracija** neovisnih pravaca za planiranje, ne preporučeni put bijega:
+   tok bira bilo koje disjunktne putove (najkraće po broju dionica), a ne najbrže ni najsigurnije.
+   Oznake cesta: OSM `ref` od 4 znamenke = županijska (Ž), 5 znamenki = lokalna (L); ostalo se ne prikazuje.
+7. **Pokretni most (D10)**: OSM `bridge=movable` (most D121 u Tisnu). Naselja s kojih svaki put prelazi
    pokretni most dobivaju napomenu s rasporedom dizanja (TZ Tisno); raspored ne ulazi u formulu.
 
 **Validacija**: Murter, Betina, Jezera i Tisno su E1; Zlarin, Prvić Luka, Prvić Šepurine, Krapanj, Kaprije i

@@ -7,6 +7,7 @@
   --naglasak: #54278f;
   --fokus: #0b57d0;
   --upozorenje: #8a1c00;
+  --sjena: 0 1px 2px rgba(0,0,0,.08), 0 6px 22px rgba(0,0,0,.14);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
   line-height: 1.45;
   color: var(--tekst);

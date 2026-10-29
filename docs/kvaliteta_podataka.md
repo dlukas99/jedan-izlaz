@@ -1,6 +1,6 @@
 # Kvaliteta podataka
 
-Generirano naredbom `python -m etl.pipeline` (2026-10-29T06:07:16).
+Generirano naredbom `python -m etl.pipeline` (2026-10-29T14:58:45).
 
 - Spajanje DZS → DGU: 199/199 naselja ([('tocno', 199)]); izvor točke: [('dgu_rgi', 194), ('osm_place', 4), ('dgu_poligon', 1)].
 - D4 v1 (mostovi grafa) i v2 (minimalni rez) slažu se za 199/199 naselja.

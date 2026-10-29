@@ -28,3 +28,8 @@ export async function ucitajPodatke(): Promise<Podaci> {
     fwiDanas, fwiPovijesni,
   }
 }
+
+/** Izlazni pravci (~1,3 MB) učitavaju se u pozadini, nakon što se karta već prikaže. */
+export async function ucitajPravce(): Promise<GeoJSON.FeatureCollection | null> {
+  return json<GeoJSON.FeatureCollection>('routes.geojson', false).catch(() => null)
+}

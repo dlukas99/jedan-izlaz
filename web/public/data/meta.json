@@ -1,5 +1,5 @@
 {
- "generirano": "2026-10-29T06:07:16",
+ "generirano": "2026-10-29T14:58:45",
  "nacin": "live",
  "scenariji": {
   "popunjenost_stalnih_postelja": {
@@ -176,7 +176,7 @@
    "url": "https://maps.effis.emergency.copernicus.eu/effis?service=WMS&version=1.1.1&request=GetMap&layers=mf010.fwi&srs=EPSG%3A4326&bbox=15.21%2C43.4%2C16.53%2C44.27&width=132&height=87&format=image%2Ftiff&time=2026-08-13&styles=",
    "licenca": "CC BY 4.0",
    "navod": "EFFIS – European Forest Fire Information System, Copernicus EMS / JRC",
-   "dohvaceno": "2026-10-29T06:05:40+0100",
+   "dohvaceno": "2026-10-29T14:56:34+0100",
    "metadata_modified": null
   },
   {
@@ -186,7 +186,7 @@
    "url": "https://maps.effis.emergency.copernicus.eu/effis?service=WFS&version=1.1.0&request=GetFeature&typename=ms%3Amodis.ba.poly&bbox=15.13%2C43.43%2C16.62%2C44.27&outputformat=geojson&maxfeatures=100000",
    "licenca": "CC BY 4.0",
    "navod": "EFFIS – European Forest Fire Information System, Copernicus EMS / JRC",
-   "dohvaceno": "2026-10-29T06:05:18+0100",
+   "dohvaceno": "2026-10-29T14:56:06+0100",
    "metadata_modified": null
   },
   {

@@ -32,9 +32,17 @@ export interface Naselje {
   iz: number
   druga_cesta_km: number | null
   druga_cesta_udio_track: number | null
+  izlazni_pravci?: IzlazniPravac[]
   tocka_izvor: string
   napomene: string[]
   izvori: string[]
+}
+
+export interface IzlazniPravac {
+  redni: number
+  km: number
+  ceste: string[]
+  kraj: 'autocesta' | 'izvan županije'
 }
 
 export interface UskoGrlo {

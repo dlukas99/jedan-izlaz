@@ -21,7 +21,10 @@ async function snimi(ime, hash, { sirina = 1440, visina = 900, cekaj = 3500, akc
 await snimi('01-karta', '#karta')
 await snimi('02-murter', '#karta/naselje/042501')
 await snimi('03-zlarin', '#karta/naselje/073369')
-await snimi('04-fwi-13-8', '#karta/naselje/022446', { akcija: (p) => p.getByLabel(/FWI 13\. 8\./).check() })
+await snimi('04-fwi-13-8', '#karta/naselje/022446', {
+  akcija: async (p) => { await p.getByText('Slojevi na karti').click(); await p.getByLabel(/FWI 13\. 8\./).check() },
+})
+await snimi('09-trazilica', '#karta', { cekaj: 800, akcija: (p) => p.getByRole('combobox').fill('ice') })
 await snimi('05-lista', '#lista', { cekaj: 800 })
 await snimi('06-izvori', '#izvori', { cekaj: 800 })
 await snimi('07-mobitel-murter', '#karta/naselje/042501', { sirina: 390, visina: 844 })

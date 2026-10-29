@@ -406,6 +406,8 @@ jedan-izlaz/
 
 **Dodana polja (v1.1, 29.10., zapis u §9):** naselja — `stanovnici_65plus`, `stanovi_odmor_jls`, `udio_naselja`, `samo_putovi`, `h_gorivo`, `h_pozari_udio`, `h_podloznost`, `druga_cesta_udio_track`, `tocka_izvor`; uska grla — `most`, `pokretni_most_iza`, `broj_izlaza`, `naselja_iza_nazivi`, `druga_cesta_km`, `pldp.naziv`; geometrija uskih grla je MultiLineString (rez može imati više bridova); nove datoteke `second_roads.geojson`, `burned.geojson`; `fwi_*.json` ima i `razredi`, `izvor`, `dohvaceno`.
 
+**Dodano v1.2 (29.10.):** naselja — `izlazni_pravci` [{`redni`, `km`, `ceste`, `kraj`}]; nova datoteka `routes.geojson` (LineString po pravcu, `naselje_id`); `cesta_ref` uskih grla je službena oznaka (D…, Ž…, L…) ili null.
+
 ---
 
 ## 6. Opseg MVP-a i ekrani
@@ -556,6 +558,9 @@ cd web; npm install; npm run dev
 - 29.10. Kontrola razumnosti D6: T < 5 min uz < 300 ljudi navodi se zbirno (očekivano), pojedinačno samo ostali slučajevi.
 - 29.10. D11 model (HistGradientBoosting, 7 obalnih županija, 250 m, blok-CV 10 km) ROC-AUC 0,776 > LR 0,747 → **prihvaćen**, zamjenjuje `p` u D8 (prosjek u 5 km). Bez DEM-a (licenca N).
 - 29.10. Shema v1.1: dodana polja (§5.2) i datoteke `second_roads.geojson`, `burned.geojson`.
+- 29.10. Prvi korisnički test (korisnik): karta pretrpana, nema tražilice, klik ne mijenja kartu, kartica „zid teksta“. Popravak: tražilica (combobox, bez dijakritika); klik crta **izlazne pravce** (rastav toka, `routes.geojson`), usko grlo crveno s natpisom i drugu cestu, ostalo prigušeno; kartica = jedna poruka + 4 brojke + „Na karti“, detalji i formule u sklopivom dijelu; zadano se vide samo uska grla s jednom cestom.
+- 29.10. Pitanje korisnika „požar u stvarnom vremenu / kuda bježati“: **ostajemo alat za planiranje (§1)**. Otvoreni podaci ne daju opseg požara ni zatvorene ceste u stvarnom vremenu (EFFIS/FIRMS satelitska žarišta kasne satima, ~375 m–1 km); usmjeravanje ljudi koji bježe radi 112/policija/vatrogasci na terenu. Pravci na karti su ilustracija neovisnih izlaza, ne preporučeni put.
+- 29.10. Oznake cesta iz OSM `ref`: 4 znamenke → Ž, 5 → L, ostalo (npr. „650650“) se ne prikazuje.
 
 ---
 
@@ -579,7 +584,7 @@ cd web; npm install; npm run dev
 - [x] OSM: Tisno `bridge=movable` (D121) — P 28.10.; Krapanj nema cestovnu vezu (E0)
 - [x] Broj naselja u ŠKŽ: 199 — P 28.10.
 - [ ] Jadrolinija: linije 505 i 532 (`data/manual/trajekti.csv` označen N) — provjeriti prije videa
-- [ ] Nazivi uskih grla: OSM `ref` ponekad nije oznaka javne ceste (npr. „650650“ kod Grebaštice) — provjeriti u OSM-u
+- [x] Nazivi uskih grla: nevaljani OSM `ref` (npr. „650650“) se više ne prikazuje; Ž/L prefiksi — 29.10.
 - [ ] Aktivirati GitHub Pages (Settings → Pages → Source: GitHub Actions) i provjeriti prvi prolaz `tests`, `pages`, `nightly_fwi`
 - [ ] Tisno: podizanje u 9:00 ljeti 2026. (Općina Tisno)
 - [ ] Citat Kincade (TR-D 2023) i vrijednost od oko 500 voz/h
@@ -596,7 +601,7 @@ cd web; npm install; npm run dev
 
 Stanje 29.10.: sve „Mora“ i „Trebalo bi“ stavke za ŠKŽ su gotove osim uključivanja Pagesa. Sljedeće:
 1. **Ljudski korak**: GitHub → Settings → Pages → Source: **GitHub Actions**; zatim pokrenuti `pages` i `nightly_fwi` (workflow_dispatch) i provjeriti demo u anonimnom prozoru i na mobitelu.
-2. Testiranje s 2–3 korisnika (CZ, vatrogasci) i UX popravci prema nalazima.
+2. Testiranje s 2–3 korisnika (CZ, vatrogasci) i UX popravci prema nalazima. Prvi krug (korisnik, 29.10.) obavljen: tražilica, izlazni pravci na karti, kraća kartica.
 3. Provjeriti Jadrolinijine linije i raspored mosta Tisno (9:00 ljeti?) i ažurirati `data/manual/`.
 4. 6.11. zamrznuti `kpi.json` za video (`docs/video_scenarij.md`), snimke `node web/scripts/snimke.mjs`.
 5. 8.11. proba predaje iz čistog klona; 9.11. tag `v1.0-predaja` (`docs/predaja.md`).

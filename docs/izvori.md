@@ -1,6 +1,6 @@
 # Izvori podataka
 
-Generirano iz `web/public/data/meta.json` (2026-10-29T06:07:16, način: `live`). Ne uređivati ručno.
+Generirano iz `web/public/data/meta.json` (2026-10-29T14:58:45, način: `live`). Ne uređivati ručno.
 
 | # | Skup podataka | Izdavač | Poveznica | Licenca | Dohvaćeno | Izmijenjeno (metapodaci) |
 |---|---|---|---|---|---|---|

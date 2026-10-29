@@ -16,6 +16,7 @@ export const fmtDec = (v: number | null | undefined) => (v == null ? '–' : dec
 /** Raspon ljudi: „3.200–4.100 (središnje 3.600)“ */
 export function fmtRasponLjudi(r: Raspon | null | undefined): string {
   if (!r || r.sred == null) return '–'
+  if (r.opt === r.pes) return fmtBroj(r.sred)
   return `${fmtBroj(r.opt)}–${fmtBroj(r.pes)} (središnje ${fmtBroj(r.sred)})`
 }
 
@@ -26,6 +27,7 @@ export const fmtSati = (h: number | null | undefined) =>
 /** Vrijeme: „1,2 h – 4,8 h (središnje 2,4 h)“ */
 export function fmtRasponSati(r: Raspon | null | undefined): string {
   if (!r || r.sred == null) return '–'
+  if (fmtSati(r.opt) === fmtSati(r.pes)) return `oko ${fmtSati(r.sred)}`
   return `${fmtSati(r.opt)} – ${fmtSati(r.pes)} (središnje ${fmtSati(r.sred)})`
 }
 
@@ -71,3 +73,14 @@ export function csvPolje(v: unknown): string {
   const s = v == null ? '' : String(v)
   return /[";\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
 }
+
+/** Kratki raspon bez „središnje“: „117–172“ ili samo „78“ kad su scenariji isti. */
+export function fmtKratkiRaspon(r: Raspon | null | undefined, f: (v: number | null) => string): string {
+  if (!r || r.sred == null) return '–'
+  const a = f(r.opt), b = f(r.pes)
+  return a === b ? a : `${a} – ${b}`
+}
+
+/** Za pretragu: mala slova bez dijakritika („Ićevo“ → „icevo“). */
+export const zaPretragu = (s: string) =>
+  s.toLocaleLowerCase('hr').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd')

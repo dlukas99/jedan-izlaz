@@ -97,6 +97,11 @@ def pokreni(kljuc_zupanije: str, nacin: str, osvjezi: bool = False):
     kvaliteta.append(f"D4 v1 (mostovi grafa) i v2 (minimalni rez) slažu se za {len(po_naselju) - len(nesklad)}"
                      f"/{len(po_naselju)} naselja" + (f"; nesklad: {nesklad}" if nesklad else "."))
     iza_pokretnog = ge.pokretni_mostovi_iza(G, sigurni)
+    autocesta = ge.cvorovi_autoceste(G)
+    # Izlazni pravci za kartu: putovi iz rastava toka (bridno-disjunktni, koliko i izlaza).
+    pravci = {nid: [{"redni": i, **ge.opis_puta(G, put, autocesta), "geometrija": ge.geometrija_puta(G, put)}
+                    for i, put in enumerate(sorted(z["putovi"], key=len), 1)]
+              for nid, z in po_naselju.items()}
 
     # ---------------------------------------------------------------- D5
     _log("D5: ljetna populacija")
@@ -121,7 +126,7 @@ def pokreni(kljuc_zupanije: str, nacin: str, osvjezi: bool = False):
         lj = ljudi(iza)
         kap = evac_time.kapacitet_reza(atr)
         t = evac_time.vrijeme_h(lj, kap)
-        refovi = [a.get("ref") for a in atr if a.get("ref")]
+        refovi = [r for r in (ge.oznaka_ceste(a.get("ref")) for a in atr) if r]
         imena = [a.get("name") for a in atr if a.get("name")]
         geom = ge.geometrija_reza(G, ug.bridovi)
         pokretni = any(a.get("pokretni_most") for a in atr)
@@ -249,6 +254,7 @@ def pokreni(kljuc_zupanije: str, nacin: str, osvjezi: bool = False):
             "iz": priority.indeks(klasa, hi, t_sred),
             "druga_cesta_km": dc["duljina_km"] if dc else None,
             "druga_cesta_udio_track": dc["udio_track"] if dc else None,
+            "izlazni_pravci": [{k: v for k, v in x.items() if k != "geometrija"} for x in pravci[r.id]],
             "tocka_izvor": r.tocka_izvor,
             "napomene": napomene,
             "izvori": ["dzs_popis_naselja", "dgu_au", "dgu_rgi", "osm", "dzs_turizam_2025", "dzs_stanovi",
@@ -259,6 +265,11 @@ def pokreni(kljuc_zupanije: str, nacin: str, osvjezi: bool = False):
         props_svi.append(props)
         znacajke.append(export.feature(gpd.GeoSeries([r.tocka], crs=CRS_ANALIZA).to_crs(4326).iloc[0], props))
     export.zapisi_geojson("settlements.geojson", znacajke)
+    # ~10 m pojednostavljenja: crta ostaje na cesti, a datoteka je nekoliko puta manja.
+    export.zapisi_geojson("routes.geojson", [
+        export.feature(x["geometrija"].simplify(0.0001), {"naselje_id": nid, "redni": x["redni"], "km": x["km"],
+                                                          "ceste": x["ceste"], "kraj": x["kraj"]})
+        for nid, lst in pravci.items() for x in lst])
 
     # ---------------------------------------------------------------- uska grla, druge ceste, požari
     ime_po_id = naselja.set_index("id").naziv.to_dict()

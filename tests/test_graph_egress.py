@@ -133,3 +133,29 @@ def test_max_tok_jednak_networkx(seed):
     for t in ponori:
         D.add_edge(t, "T")
     assert e == nx.maximum_flow_value(D, "S", "T")
+
+
+def test_putovi_toka_su_izlazni_pravci():
+    """Rastav toka daje točno e putova, svaki od jezgre do sigurnog čvora, bez zajedničkog brida."""
+    G = nx.Graph()
+    sigurni = _kopno(G)
+    jz = _otok(G, "o")
+    G.add_edge("oa", "k3,3", paralelno=1)
+    G.add_edge("ob", "k5,5", paralelno=1)
+    e, tok = ge.max_tok(G, jz, sigurni)
+    putovi = ge.putovi_toka(jz, sigurni, tok)
+    assert len(putovi) == e == 2
+    bridovi = [frozenset(b) for p in putovi for b in zip(p, p[1:])]
+    assert len(bridovi) == len(set(bridovi))
+    for p in putovi:
+        assert p[0] in jz and p[-1] in sigurni
+        assert all(G.has_edge(u, v) for u, v in zip(p, p[1:]))
+
+
+def test_oznaka_ceste():
+    assert ge.oznaka_ceste("D121") == "D121"
+    assert ge.oznaka_ceste("A1") == "A1"
+    assert ge.oznaka_ceste("6090") == "Ž6090"
+    assert ge.oznaka_ceste("65014") == "L65014"
+    assert ge.oznaka_ceste("650650") is None
+    assert ge.oznaka_ceste(None) is None

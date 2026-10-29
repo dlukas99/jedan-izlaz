@@ -36,6 +36,11 @@ paths:
       summary: Kandidati za „drugu cestu“ (prohodnost provjeriti na terenu)
       responses:
         "200": { description: GeoJSON FeatureCollection (LineString) }
+  /data/routes.geojson:
+    get:
+      summary: Izlazni pravci naselja — bridno-disjunktni putovi iz rastava toka (naselje_id, redni, km, ceste, kraj)
+      responses:
+        "200": { description: GeoJSON FeatureCollection (LineString) }
   /data/burned.geojson:
     get:
       summary: EFFIS opožarene površine u području (pojednostavljeno, CC BY 4.0)

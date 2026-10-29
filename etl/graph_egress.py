@@ -202,6 +202,39 @@ def rez_najblizi_ponoru(G: nx.Graph, izvori: set, ponori: set, tok: dict) -> tup
     return sorted(set(tuple(sorted((u, v), key=str)) for u, v in rez), key=str), iza
 
 
+def putovi_toka(izvori: set, ponori: set, tok: dict) -> list[list]:
+    """Rastavi tok na bridno-disjunktne putove (izvor → ponor) — to su IZLAZNI PRAVCI za kartu.
+
+    Zašto iz toka, a ne npr. k najkraćih putova: tok već jamči da putovi nemaju
+    zajednički brid, pa ih je na karti točno onoliko koliko piše „broj izlaza“.
+    Ako rastavljanje naiđe na kružni tok, petlju izrežemo (ne mijenja izlaz).
+    """
+    izlaz: dict = {}
+    for (u, v), f in tok.items():
+        if f > 0:
+            izlaz.setdefault(u, {})[v] = f
+    putovi = []
+    for s in izvori:
+        while izlaz.get(s):
+            put, u = [s], s
+            while u not in ponori:
+                susjedi = izlaz.get(u)
+                if not susjedi:
+                    break  # ne bi se smjelo dogoditi (očuvanje toka); put odbacujemo
+                v = next(iter(susjedi))
+                susjedi[v] -= 1
+                if susjedi[v] == 0:
+                    del susjedi[v]
+                if v in put:
+                    put = put[:put.index(v) + 1]
+                else:
+                    put.append(v)
+                u = v
+            if u in ponori:
+                putovi.append(put)
+    return putovi
+
+
 def klasa(e: int) -> str:
     if e == 0:
         return "E0"
@@ -223,16 +256,18 @@ def izlazi_svih(G: nx.Graph, jezgre: dict, sigurni: set) -> tuple[dict, dict]:
     """D4 v2 za sva naselja.
 
     Vraća (po_naselju, uska_grla):
-      po_naselju[id] = {izlazi_e, klasa_izlaza, usko_grlo (ključ ili None), cvorovi_iza (set)}
+      po_naselju[id] = {izlazi_e, klasa_izlaza, usko_grlo (ključ ili None), cvorovi_iza (set), putovi}
       uska_grla[ključ] = UskoGrlo — ključ je tuple bridova reza (isti rez dijeli više naselja).
     """
     po_naselju, uska = {}, {}
     for nid, jz in jezgre.items():
         if not jz:
-            po_naselju[nid] = {"izlazi_e": 0, "klasa_izlaza": "E0", "usko_grlo": None, "cvorovi_iza": set()}
+            po_naselju[nid] = {"izlazi_e": 0, "klasa_izlaza": "E0", "usko_grlo": None, "cvorovi_iza": set(),
+                               "putovi": []}
             continue
         e, tok = max_tok(G, set(jz), sigurni)
-        zapis = {"izlazi_e": int(e), "klasa_izlaza": klasa(e), "usko_grlo": None, "cvorovi_iza": set()}
+        zapis = {"izlazi_e": int(e), "klasa_izlaza": klasa(e), "usko_grlo": None, "cvorovi_iza": set(),
+                 "putovi": putovi_toka(set(jz), sigurni, tok)}
         if e < MAKS_IZLAZA:
             bridovi, iza = rez_najblizi_ponoru(G, set(jz), sigurni, tok)
             zapis["cvorovi_iza"] = iza
@@ -255,6 +290,55 @@ def geometrija_brida(G: nx.Graph, u, v) -> LineString:
     if g is not None:
         return g
     return LineString([(G.nodes[u]["x"], G.nodes[u]["y"]), (G.nodes[v]["x"], G.nodes[v]["y"])])
+
+
+def geometrija_puta(G: nx.Graph, put: list) -> LineString:
+    """Niz čvorova → jedna linija; geometriju svakog brida okrećemo u smjeru puta."""
+    koord = []
+    for u, v in zip(put, put[1:]):
+        c = list(geometrija_brida(G, u, v).coords)
+        pu = (G.nodes[u]["x"], G.nodes[u]["y"])
+        if np.hypot(c[0][0] - pu[0], c[0][1] - pu[1]) > np.hypot(c[-1][0] - pu[0], c[-1][1] - pu[1]):
+            c.reverse()
+        koord.extend(c if not koord else c[1:])
+    return LineString(koord)
+
+
+def oznaka_ceste(ref) -> str | None:
+    """OSM `ref` → službena oznaka javne ceste.
+
+    U hrvatskom OSM-u državne i autoceste imaju slovo (D8, A1), a županijske i
+    lokalne samo broj. Po sustavu razvrstavanja javnih cesta županijske imaju
+    4 znamenke (Ž6090), lokalne 5 (L65014). Ostalo (npr. „650650“) nije valjana
+    oznaka javne ceste pa je ne prikazujemo.
+    """
+    if not ref:
+        return None
+    ref = str(ref).split(";")[0].strip().replace(" ", "")
+    if ref[:1] in ("A", "D") and ref[1:].isdigit():
+        return ref
+    if ref.isdigit() and len(ref) == 4:
+        return f"Ž{ref}"
+    if ref.isdigit() and len(ref) == 5:
+        return f"L{ref}"
+    return None
+
+
+def opis_puta(G: nx.Graph, put: list, sigurni_autocesta: set) -> dict:
+    """Duljina (km), redom oznake cesta (D121 → D8 …) i kamo put izlazi (autocesta / izvan županije)."""
+    duljina, ceste = 0.0, []
+    for u, v in zip(put, put[1:]):
+        d = G[u][v]
+        duljina += float(d.get("length") or 0)
+        ref = oznaka_ceste(d.get("ref"))
+        if ref and (not ceste or ceste[-1] != ref):
+            ceste.append(ref)
+    return {"km": round(duljina / 1000, 1), "ceste": ceste[:6],
+            "kraj": "autocesta" if put[-1] in sigurni_autocesta else "izvan županije"}
+
+
+def cvorovi_autoceste(G: nx.Graph) -> set:
+    return {n for u, v, d in G.edges(data=True) if d.get("highway") == "motorway" for n in (u, v)}
 
 
 def geometrija_reza(G: nx.Graph, bridovi: list) -> MultiLineString:
